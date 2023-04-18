@@ -1,0 +1,21 @@
+body{
+    background: black;
+  }
+  .card {
+    background-color: white;
+    overflow: hidden;
+    min-height: 400px;
+    color:white;
+  }
+.delete {
+    background: white;
+    text-transform: uppercase;
+    transition: 0.5s ease-in-out;
+  }
+  .delete:hover {
+    background: #6610f2;
+    color:white;
+  }
+  .btn-delete:hover {
+    color:red;
+  }
