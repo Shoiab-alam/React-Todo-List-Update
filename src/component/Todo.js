@@ -4,25 +4,52 @@ import './Todo.css'
 const Todo = () => {
     const [inputData, setInputData] = useState()
     const [Items, setItems] = useState([])
+    const [toggleSubmit,setToggleSubmit] = useState(true)
+    const [isEditItem,setIsEditItem] = useState(null)
 
 
     const addItems = (event) => {
         event.preventDefault();
         if(!inputData){
+            
+        }else if(inputData && !toggleSubmit){
+            setItems(Items.map((elem)=>{
+                if(elem.id === isEditItem){
+
+                    return {...elem,name:inputData}
+                    
+                }return elem
+            }))
+            setToggleSubmit(true)
+            setInputData('')
+            
         }else{
-            setItems([ inputData,...Items])
+            const allInputData = {id : new Date().getTime().toString(), name: inputData}
+            setItems([...Items, allInputData]);
             setInputData('')
         }}
 
-        const deleteItem = (id) => {
-        setItems((preValue)=>{
-            return preValue.filter((items,index)=>{
-                return index !== id;
-            })})}
+
+        const deleteItem = (id) => {   
+            const deleteItems = Items.filter((elem)=>{
+                return id !== elem.id
+            })           
+            setItems(deleteItems)
+        }
+
     
         const removeAll = () => {
             setItems([])
             setInputData('')
+        }
+
+        const editItems = (id) =>{
+            let newEditData = Items.find((elem)=>{
+                return elem.id === id;
+            })
+            setToggleSubmit(false)
+            setInputData(newEditData.name)
+            setIsEditItem(id)
         }
 
     return (
@@ -40,19 +67,28 @@ const Todo = () => {
                                         <input type='text' placeholder='✍️ Add Items ...' className='form-control' value={inputData} onChange={(event) =>{
                                             setInputData(event.target.value)
                                         }} />
-                                        <Tooltip title='Add Item'>
-                                        <Button variant="contained" pill color='primary' onClick={addItems}><i className="fa-solid fa-plus" /></Button>
-                                        </Tooltip>
+                                        
+                                        {toggleSubmit? <Button title='Add Item' variant="contained" pill color='primary' onClick={addItems}><i className='fa-solid fa-plus'/></Button>: <Button title='Update Item' variant="contained" pill color='primary' onClick={addItems}><i className="fa-solid fa-pen-to-square"/></Button> }
+                    
                                     </div>
                                     <br></br>
-                                    {Items.map((item, index)=>
-                                        <div className='d-flex justify-content-between align-items-center border rounded-3 p-1 mb-3 delete' key={index}>
-                                            <h5>{item}</h5>
-                                            <Tooltip title='Delete Selected Item'>
-                                            <Button variant="contained" className='btn-delete' pill onClick={()=> deleteItem(index)}><i className="fa-solid fa-trash"></i></Button>
+
+                                    {Items.map((elem)=>
+                                        <div className='d-flex justify-content-between align-items-center border rounded-3 p-1 mb-3 delete' key={elem.id}>
+                                            <h6>{elem.name}</h6>
+                                            <div>
+                                            <Tooltip title='Edit Selected Item'>
+                                            <Button variant="contained" className='btn-delete mx-2' pill onClick={()=> editItems(elem.id)} >
+                                                <i className="fa-solid fa-pen-to-square"/>
+                                                </Button>
                                             </Tooltip>
+                                            <Tooltip title='Delete Selected Item'>
+                                            <Button variant="contained" className='btn-delete' pill onClick={()=> deleteItem(elem.id)}><i className="fa-solid fa-trash"/></Button>
+                                            </Tooltip>
+                                            </div>
                                         </div>
                                         )}
+
 
                                     <br />
                                     <div className='text-center'>
