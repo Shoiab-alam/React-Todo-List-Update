@@ -15,9 +15,7 @@ const Todo = () => {
         }else if(inputData && !toggleSubmit){
             setItems(Items.map((elem)=>{
                 if(elem.id === isEditItem){
-
-                    return {...elem,name:inputData}
-                    
+                    return {...elem,name:inputData}  
                 }return elem
             }))
             setToggleSubmit(true)
@@ -93,7 +91,7 @@ const Todo = () => {
                                     <br />
                                     <div className='text-center'>
                                         <Tooltip title='Delete All Item'>
-                                        <Button variant="contained" pill color='primary' onClick={removeAll}>Check List</Button>
+                                        <Button variant="contained" pill color='primary' onClick={removeAll}>Clear List</Button>
                                         </Tooltip>
                                     </div>
                                 </div>
